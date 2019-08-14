@@ -2,18 +2,18 @@ import org.junit.*;
 import java.io.*;
 import java.net.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.*;
 
 public class HttpServerTest {
     private MockServerSocket mockServerSocket;
     private HttpServer server;
-    private String fakeInput = "GET / HTTP/1.1";
+    private String fakeGetRequest = "GET / HTTP/1.1";
     private PrintWriter serverMessages = new PrintWriter(new StringWriter(), true);
 
     @Before
     public void setUpServer() throws IOException {
-        ByteArrayInputStream clientInput = new ByteArrayInputStream((fakeInput).getBytes());
+        ByteArrayInputStream clientInput = new ByteArrayInputStream((fakeGetRequest).getBytes());
         ByteArrayOutputStream clientOutput = new ByteArrayOutputStream();
         Socket mockClientSocket = new MockClientSocket(clientInput, clientOutput);
         mockServerSocket = new MockServerSocket(mockClientSocket);
@@ -34,7 +34,15 @@ public class HttpServerTest {
     @Test
     public void receivesGetRequest() {
         server.listen();
-        String request = server.parseInput();
-        assertEquals(fakeInput, request);
+        String request = server.readInput();
+        assertEquals(fakeGetRequest, request);
+    }
+
+    @Test
+    public void sendsAnEmptyResponseWithStatusCode200() {
+        server.listen();
+        server.readInput();
+        String response = server.sendResponse();
+        assertThat(response, containsString("200"));
     }
 }

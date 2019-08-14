@@ -6,6 +6,7 @@ public class HttpServer {
     private Socket clientSocket;
     private BufferedReader clientInput;
     private PrintWriter output;
+    private String request;
 
     public HttpServer(ServerSocket serverSocket, PrintWriter output) {
         this.serverSocket = serverSocket;
@@ -21,14 +22,23 @@ public class HttpServer {
         }
     }
 
-    public String parseInput() {
-        String request = "";
+    public String readInput() {
         try {
             request = clientInput.readLine();
         } catch (IOException ex) {
             output.println(ex);
         }
         return request;
+    }
+
+    public String sendResponse() {
+        Routes routes = new Routes();
+        Response response = new Response();
+        if (routes.isValidRoute(request)) {
+            return response.simpleGet();
+        } else {
+            return "invalid request";
+        }
     }
 
     private void setUpIOStreams() {
