@@ -3,26 +3,40 @@ import java.net.*;
 
 public class HttpServer {
     private ServerSocket serverSocket;
-    private Socket clientSocket;
     private BufferedReader clientInput;
+    private PrintWriter clientOutput;
     private PrintWriter output;
     private String request;
 
-    public HttpServer(ServerSocket serverSocket, PrintWriter output) {
-        this.serverSocket = serverSocket;
+    public HttpServer(PrintWriter output) {
         this.output = output;
     }
 
-    public void listen() {
+    public void start() {
+        int port = 5000;
         try {
-            clientSocket = serverSocket.accept();
-            setUpIOStreams();
+            serverSocket = new ServerSocket(port);
+            communicate();
         } catch (IOException ex) {
             output.println(ex);
         }
     }
 
-    public String readInput() {
+    private void communicate() {
+        while (true) {
+            try {
+                Socket clientSocket = serverSocket.accept();
+                parseRequestFrom(clientSocket);
+                clientOutput.printf(sendResponse());
+                clientSocket.close();
+            } catch (IOException ex) {
+                output.println(ex);
+            }
+        }
+    }
+
+    public String parseRequestFrom(Socket clientSocket) {
+        setUpIOStreams(clientSocket);
         try {
             request = clientInput.readLine();
         } catch (IOException ex) {
@@ -41,21 +55,13 @@ public class HttpServer {
         }
     }
 
-    private void setUpIOStreams() {
+    private void setUpIOStreams(Socket clientSocket) {
         try {
             clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+            clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
             output.println("IO streams created");
         } catch (IOException ex) {
             output.println(ex);
-        }
-    }
-
-    public void stop() {
-        try {
-            serverSocket.close();
-        } catch (IOException ex) {
-            System.out.println(ex);
         }
     }
 }
