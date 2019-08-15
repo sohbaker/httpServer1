@@ -13,7 +13,7 @@ public class HttpServerTest {
     private ServerSocket mockServerSocket;
 
     @Test
-    public void sendsEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
+    public void senEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
         mockClientSocket = mockClientSocketCreator.createWithInput("GET /simple_get HTTP/1.1");
         mockServerSocket = new MockServerSocket(mockClientSocket);
         server = new HttpServer(mockServerSocket, serverMessages);
