@@ -7,55 +7,52 @@ public class HttpServer {
     private PrintWriter clientOutput;
     private PrintWriter output;
     private String request;
+    private Socket clientSocket;
 
-    public HttpServer(PrintWriter output) {
+    public HttpServer(ServerSocket serverSocket, PrintWriter output) {
+        this.serverSocket = serverSocket;
         this.output = output;
     }
 
     public void start() {
-        int port = 5000;
-        try {
-            serverSocket = new ServerSocket(port);
+        while (true) {
             communicate();
+        }
+    }
+
+    public void communicate() {
+        try {
+            clientSocket = serverSocket.accept();
+            setUpIOStreams();
+            parseRequestFrom();
+            clientOutput.printf(sendResponse());
+            clientSocket.close();
         } catch (IOException ex) {
             output.println(ex);
         }
     }
 
-    private void communicate() {
-        while (true) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                parseRequestFrom(clientSocket);
-                clientOutput.printf(sendResponse());
-                clientSocket.close();
-            } catch (IOException ex) {
-                output.println(ex);
-            }
-        }
-    }
-
-    public String parseRequestFrom(Socket clientSocket) {
-        setUpIOStreams(clientSocket);
+    private void parseRequestFrom() {
         try {
             request = clientInput.readLine();
         } catch (IOException ex) {
             output.println(ex);
         }
-        return request;
     }
 
-    public String sendResponse() {
+    private String sendResponse() {
         Routes routes = new Routes();
         Response response = new Response();
-        if (routes.isValidRoute(request)) {
+        if (routes.isGetRequest(request)) {
             return response.simpleGet();
+        } else if (routes.isNotFound(request)){
+            return response.notFound();
         } else {
             return "invalid request";
         }
     }
 
-    private void setUpIOStreams(Socket clientSocket) {
+    private void setUpIOStreams() {
         try {
             clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);

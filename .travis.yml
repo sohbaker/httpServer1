@@ -4,8 +4,7 @@ sudo: false
 env:
   - PORT=5000
 script:
-  - ./gradlew test
-  - java -Dserver.port=$PORT $JAVA_OPTS -jar target/RouteMaster-1.0-SNAPSHOT.jar &
+  - ./gradlew --console plain run &
   - cd src/test/acceptanceTests
   - bundle install
   - bundle exec spinach

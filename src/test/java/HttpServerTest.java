@@ -7,41 +7,28 @@ import static org.junit.Assert.*;
 
 public class HttpServerTest {
     private HttpServer server;
-    private String fakeGetRequest = "GET /simple_get HTTP/1.1";
     private PrintWriter serverMessages = new PrintWriter(new StringWriter(), true);
+    private MockClientSocketCreator mockClientSocketCreator = new MockClientSocketCreator();
     private Socket mockClientSocket;
+    private ServerSocket mockServerSocket;
 
-    @Before
-    public void setUpServer() {
-        ByteArrayInputStream clientInput = new ByteArrayInputStream((fakeGetRequest).getBytes());
-        ByteArrayOutputStream clientOutput = new ByteArrayOutputStream();
-        mockClientSocket = new MockClientSocket(clientInput, clientOutput);
-        server = new HttpServer(serverMessages);
+    @Test
+    public void senEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
+        mockClientSocket = mockClientSocketCreator.createWithInput("GET /simple_get HTTP/1.1");
+        mockServerSocket = new MockServerSocket(mockClientSocket);
+        server = new HttpServer(mockServerSocket, serverMessages);
+
+        server.communicate();
+        assertThat(mockClientSocket.getOutputStream().toString(), containsString("200"));
     }
 
     @Test
-    public void acceptsANewClientConnection() {
-        server.start();
-        int port = 1234;
-        try (Socket ableToConnect = new Socket("127.0.0.1", port)) {
-            assertTrue("Accepts connection when server socket is listening", ableToConnect.isConnected());
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
+    public void sends404ResponseForNotFoundRequest() throws IOException {
+        mockClientSocket = mockClientSocketCreator.createWithInput("GET /not_found_resource HTTP/1.1");
+        mockServerSocket = new MockServerSocket(mockClientSocket);
+        server = new HttpServer(mockServerSocket, serverMessages);
 
-    @Test
-    public void receivesGetRequest() {
-        server.start();
-        String request = server.parseRequestFrom(mockClientSocket);
-        assertEquals(fakeGetRequest, request);
-    }
-
-    @Test
-    public void sendsAnEmptyResponseWithStatusCode200ForGetRequest() {
-        server.start();
-        server.parseRequestFrom(mockClientSocket);
-        String response = server.sendResponse();
-        assertThat(response, containsString("200"));
+        server.communicate();
+        assertThat(mockClientSocket.getOutputStream().toString(), containsString("404"));
     }
 }
