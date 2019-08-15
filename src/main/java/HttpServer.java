@@ -23,7 +23,8 @@ public class HttpServer {
     public void communicate() {
         try {
             clientSocket = serverSocket.accept();
-            parseRequestFrom(clientSocket);
+            setUpIOStreams();
+            parseRequestFrom();
             clientOutput.printf(sendResponse());
             clientSocket.close();
         } catch (IOException ex) {
@@ -31,27 +32,27 @@ public class HttpServer {
         }
     }
 
-    public String parseRequestFrom(Socket clientSocket) {
-        setUpIOStreams(clientSocket);
+    private void parseRequestFrom() {
         try {
             request = clientInput.readLine();
         } catch (IOException ex) {
             output.println(ex);
         }
-        return request;
     }
 
-    public String sendResponse() {
+    private String sendResponse() {
         Routes routes = new Routes();
         Response response = new Response();
-        if (routes.isValidRoute(request)) {
+        if (routes.isGetRequest(request)) {
             return response.simpleGet();
+        } else if (routes.isNotFound(request)){
+            return response.notFound();
         } else {
             return "invalid request";
         }
     }
 
-    private void setUpIOStreams(Socket clientSocket) {
+    private void setUpIOStreams() {
         try {
             clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);

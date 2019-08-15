@@ -1,9 +1,9 @@
 public class Routes {
-    private boolean isGetRequest(String request) {
+    public boolean isGetRequest(String request) {
         return request.equalsIgnoreCase("GET /simple_get HTTP/1.1");
     }
 
-    public boolean isValidRoute(String request) {
-        return isGetRequest(request);
+    public boolean isNotFound(String request) {
+        return request.equalsIgnoreCase("GET /not_found_resource HTTP/1.1");
     }
 }

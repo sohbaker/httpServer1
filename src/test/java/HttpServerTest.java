@@ -7,22 +7,28 @@ import static org.junit.Assert.*;
 
 public class HttpServerTest {
     private HttpServer server;
-    private String fakeGetRequest = "GET /simple_get HTTP/1.1";
     private PrintWriter serverMessages = new PrintWriter(new StringWriter(), true);
+    private MockClientSocketCreator mockClientSocketCreator = new MockClientSocketCreator();
     private Socket mockClientSocket;
+    private ServerSocket mockServerSocket;
 
-    @Before
-    public void setUpServer() throws IOException {
-        ByteArrayInputStream clientInput = new ByteArrayInputStream((fakeGetRequest).getBytes());
-        ByteArrayOutputStream clientOutput = new ByteArrayOutputStream();
-        mockClientSocket = new MockClientSocket(clientInput, clientOutput);
-        MockServerSocket mockServerSocket = new MockServerSocket(mockClientSocket);
+    @Test
+    public void sendsEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
+        mockClientSocket = mockClientSocketCreator.createWithInput("GET /simple_get HTTP/1.1");
+        mockServerSocket = new MockServerSocket(mockClientSocket);
         server = new HttpServer(mockServerSocket, serverMessages);
+
+        server.communicate();
+        assertThat(mockClientSocket.getOutputStream().toString(), containsString("200"));
     }
 
     @Test
-    public void sendsAnEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
+    public void sends404ResponseForNotFoundRequest() throws IOException {
+        mockClientSocket = mockClientSocketCreator.createWithInput("GET /not_found_resource HTTP/1.1");
+        mockServerSocket = new MockServerSocket(mockClientSocket);
+        server = new HttpServer(mockServerSocket, serverMessages);
+
         server.communicate();
-        assertThat(mockClientSocket.getOutputStream().toString(), containsString("200"));
+        assertThat(mockClientSocket.getOutputStream().toString(), containsString("404"));
     }
 }
