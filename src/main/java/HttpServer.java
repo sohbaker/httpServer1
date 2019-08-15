@@ -7,31 +7,27 @@ public class HttpServer {
     private PrintWriter clientOutput;
     private PrintWriter output;
     private String request;
+    private Socket clientSocket;
 
-    public HttpServer(PrintWriter output) {
+    public HttpServer(ServerSocket serverSocket, PrintWriter output) {
+        this.serverSocket = serverSocket;
         this.output = output;
     }
 
     public void start() {
-        int port = 5000;
-        try {
-            serverSocket = new ServerSocket(port);
+        while (true) {
             communicate();
-        } catch (IOException ex) {
-            output.println(ex);
         }
     }
 
-    private void communicate() {
-        while (true) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                parseRequestFrom(clientSocket);
-                clientOutput.printf(sendResponse());
-                clientSocket.close();
-            } catch (IOException ex) {
-                output.println(ex);
-            }
+    public void communicate() {
+        try {
+            clientSocket = serverSocket.accept();
+            parseRequestFrom(clientSocket);
+            clientOutput.printf(sendResponse());
+            clientSocket.close();
+        } catch (IOException ex) {
+            output.println(ex);
         }
     }
 
