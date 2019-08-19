@@ -13,7 +13,7 @@ public class HttpServerTest {
     private ServerSocket mockServerSocket;
 
     @Test
-    public void senEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
+    public void sendsEmptyResponseWithStatusCode200ForSimpleGetRequest() throws IOException {
         mockClientSocket = mockClientSocketCreator.createWithInput("GET /simple_get HTTP/1.1");
         mockServerSocket = new MockServerSocket(mockClientSocket);
         server = new HttpServer(mockServerSocket, serverMessages);
@@ -30,5 +30,17 @@ public class HttpServerTest {
 
         server.communicate();
         assertThat(mockClientSocket.getOutputStream().toString(), containsString("404"));
+    }
+
+    @Test
+    public void sendsEchoedResponseWithStatusCode200ForSimplePostRequest() throws IOException {
+        mockClientSocket = mockClientSocketCreator.createWithInput("POST /echo_body HTTP/1.1\r\nContent Length: 5\r\n\r\nhello");
+        mockServerSocket = new MockServerSocket(mockClientSocket);
+        server = new HttpServer(mockServerSocket, serverMessages);
+
+        server.communicate();
+
+        assertThat(mockClientSocket.getOutputStream().toString(), containsString("200"));
+        assertThat(mockClientSocket.getOutputStream().toString(), containsString("hello"));
     }
 }

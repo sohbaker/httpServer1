@@ -3,9 +3,10 @@ import java.net.*;
 
 public class HttpServer {
     private ServerSocket serverSocket;
-    private BufferedReader clientInput;
+    private InputStream clientInput;
     private PrintWriter clientOutput;
     private PrintWriter output;
+    private StringBuilder result = new StringBuilder();
     private String request;
     private Socket clientSocket;
 
@@ -24,7 +25,7 @@ public class HttpServer {
         try {
             clientSocket = serverSocket.accept();
             setUpIOStreams();
-            parseRequestFrom();
+            parseRequest();
             clientOutput.printf(sendResponse());
             clientSocket.close();
         } catch (IOException ex) {
@@ -32,21 +33,23 @@ public class HttpServer {
         }
     }
 
-    private void parseRequestFrom() {
-        try {
-            request = clientInput.readLine();
-        } catch (IOException ex) {
-            output.println(ex);
-        }
+    private void parseRequest() throws IOException {
+        do {
+            result.append((char) clientInput.read());
+        } while (clientInput.available() > 0);
     }
 
     private String sendResponse() {
         Routes routes = new Routes();
         Response response = new Response();
+        request = result.toString();
+
         if (routes.isGetRequest(request)) {
             return response.simpleGet();
-        } else if (routes.isNotFound(request)){
+        } else if (routes.isNotFound(request)) {
             return response.notFound();
+        } else if (routes.isPostRequest(request)) {
+            return response.echoResponse(request);
         } else {
             return "invalid request";
         }
@@ -54,7 +57,7 @@ public class HttpServer {
 
     private void setUpIOStreams() {
         try {
-            clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            clientInput = clientSocket.getInputStream();
             clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
             output.println("IO streams created");
         } catch (IOException ex) {
