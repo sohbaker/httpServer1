@@ -9,4 +9,3 @@ script:
   - bundle install
   - bundle exec spinach
   - kill %1
-  - cd /
