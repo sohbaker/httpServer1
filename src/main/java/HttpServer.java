@@ -6,8 +6,7 @@ public class HttpServer {
     private InputStream clientInput;
     private PrintWriter clientOutput;
     private PrintWriter output;
-    private StringBuilder result = new StringBuilder();
-    private String request;
+
     private Socket clientSocket;
 
     public HttpServer(ServerSocket serverSocket, PrintWriter output) {
@@ -24,25 +23,26 @@ public class HttpServer {
     public void communicate() {
         try {
             clientSocket = serverSocket.accept();
+            output.println("Accepted Client Connection");
             setUpIOStreams();
-            parseRequest();
-            clientOutput.printf(sendResponse());
+            clientOutput.printf(sendResponseFor(request()));
             clientSocket.close();
         } catch (IOException ex) {
             output.println(ex);
         }
     }
 
-    private void parseRequest() throws IOException {
+    private String request() throws IOException {
+        StringBuilder result = new StringBuilder();
         do {
             result.append((char) clientInput.read());
         } while (clientInput.available() > 0);
+        return result.toString();
     }
 
-    private String sendResponse() {
+    private String sendResponseFor(String request) {
         Routes routes = new Routes();
         Response response = new Response();
-        request = result.toString();
 
         if (routes.isGetRequest(request)) {
             return response.simpleGet();
