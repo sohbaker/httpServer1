@@ -1,7 +1,8 @@
 public enum StatusCode {
     _200("200 OK"),
     _400("400 Bad Request"),
-    _404("404 Not Found");
+    _404("404 Not Found"),
+    _405("405 Method Not Allowed");
 
     public final String message;
 

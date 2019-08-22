@@ -15,6 +15,9 @@ public class RequestMatcher {
             case NOT_FOUND:
                 responseStatus = StatusCode._404.getMessage();
                 break;
+            case GET_ONLY_HEAD:
+                responseStatus = StatusCode._405.getMessage();
+                break;
             default:
                 responseStatus = StatusCode._400.getMessage();
         }
@@ -24,6 +27,10 @@ public class RequestMatcher {
     public List<String> getResponseHeadersFor(RequestLine requestLine) {
         List<String> headers = new ArrayList<>();
         switch (requestLine) {
+            case GET_ONLY_HEAD:
+                headers.add("Allow: " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString());
+                headers.add("Date: " + new DateHeader().getDate());
+                break;
             case OPTIONS_2_GET:
                 headers.add("Allow: " + Method.GET.toString() + ", " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString() + ", " + Method.PUT.toString() + ", " + Method.POST.toString());
                 headers.add("Date: " + new DateHeader().getDate());
