@@ -1,9 +1,10 @@
 public class ResponseBuilder {
     private String statusLine;
     private String body;
+    private String space = new ControlCharacter().space();
 
     public ResponseBuilder setStatusLine(String protocol, String statusCode, String CRLF) {
-        this.statusLine = protocol + " " + statusCode + CRLF + CRLF;
+        this.statusLine = protocol + space + statusCode + CRLF + CRLF;
         return this;
     }
 

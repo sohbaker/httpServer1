@@ -1,6 +1,7 @@
 public class Request {
     private String clientRequest;
-    private String CRLF = "\r\n";
+    private String CRLF = new ControlCharacter().CRLF();
+    private String space = new ControlCharacter().space();
     private String method;
     private String headerLine;
 
@@ -46,7 +47,7 @@ public class Request {
     }
 
     private void splitFirstLineOfHeader(String firstLine) {
-        String[] splitMethodTarget = firstLine.split(" ");
+        String[] splitMethodTarget = firstLine.split(space);
         this.method = splitMethodTarget[0];
     }
 }
