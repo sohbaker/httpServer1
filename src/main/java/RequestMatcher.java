@@ -8,6 +8,7 @@ public class RequestMatcher {
             case SIMPLE_HEAD:
             case HEAD_NO_BODY:
             case OPTIONS_GET:
+            case OPTIONS_2_GET:
             case POST_ECHO:
                 responseStatus = StatusCode._200.getMessage();
                 break;
@@ -23,6 +24,10 @@ public class RequestMatcher {
     public List<String> getResponseHeadersFor(RequestLine requestLine) {
         List<String> headers = new ArrayList<>();
         switch (requestLine) {
+            case OPTIONS_2_GET:
+                headers.add("Allow: " + Method.GET.toString() + ", " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString() + ", " + Method.PUT.toString() + ", " + Method.POST.toString());
+                headers.add("Date: " + new DateHeader().getDate());
+                break;
             case OPTIONS_GET:
                 headers.add("Allow: " + Method.GET.toString() + ", " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString());
                 headers.add("Date: " + new DateHeader().getDate());
