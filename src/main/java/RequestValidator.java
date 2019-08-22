@@ -1,5 +1,5 @@
 public class RequestValidator {
-    public boolean isValidMethod(String requestMethod) {
+    private boolean isValidMethod(String requestMethod) {
         for (Method method : Method.values()) {
             if (method.toString().equalsIgnoreCase(requestMethod)) {
                 return true;
@@ -8,9 +8,9 @@ public class RequestValidator {
         return false;
     }
 
-    public boolean isValidRequestLine(String requestLine) {
+    private boolean isValidRequestLine(String requestLine) {
         for (RequestLine line : RequestLine.values()) {
-            if (requestLine.equalsIgnoreCase(line.getLine())) {
+            if (requestLine.contains(line.getLine())) {
                 return true;
             }
         }
