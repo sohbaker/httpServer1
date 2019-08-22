@@ -1,8 +1,8 @@
 public enum RequestLine {
-    SIMPLE_GET("GET /simple_get HTTP/1.1"),
-    NOT_FOUND("GET /not_found_resource HTTP/1.1"),
-    POST_ECHO("POST /echo_body HTTP/1.1"),
-    INVALID("INVALID / HTTP/1.1");
+    SIMPLE_GET("GET /simple_get"),
+    NOT_FOUND("GET /not_found_resource"),
+    POST_ECHO("POST /echo_body"),
+    INVALID("INVALID /");
 
     public final String line;
 
