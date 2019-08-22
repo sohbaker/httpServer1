@@ -1,5 +1,6 @@
 public enum RequestLine {
     SIMPLE_GET("GET /simple_get"),
+    SIMPLE_HEAD("HEAD /simple_get"),
     NOT_FOUND("GET /not_found_resource"),
     POST_ECHO("POST /echo_body"),
     INVALID("INVALID /");
