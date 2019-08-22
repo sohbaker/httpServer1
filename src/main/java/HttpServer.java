@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.List;
 
 public class HttpServer {
     private ServerSocket serverSocket;
@@ -47,9 +48,10 @@ public class HttpServer {
         RequestMatcher requestMatcher = new RequestMatcher();
         ResponseBuilder responseBuilder = new ResponseBuilder();
         ResponseHandler responseHandler = new ResponseHandler(request, requestMatcher);
-        String responseStatus = responseHandler.getResponseStatusCode();
+        String responseStatus = responseHandler.getResponseStatus();
+        List<String> headers = responseHandler.getResponseHeaders();
 
-        Response response = new Response(responseStatus, request.getBody(), responseBuilder);
+        Response response = new Response(responseStatus, headers, request.getBody(), responseBuilder);
         return response.format();
     }
 
