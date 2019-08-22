@@ -3,6 +3,8 @@ public class RequestMatcher {
         String responseStatus;
         switch (requestLine) {
             case SIMPLE_GET:
+            case SIMPLE_HEAD:
+            case HEAD_NO_BODY:
             case POST_ECHO:
                 responseStatus = StatusCode._200.getMessage();
                 break;
