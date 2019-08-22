@@ -6,6 +6,8 @@ public class HttpServer {
     private InputStream clientInput;
     private PrintWriter clientOutput;
     private PrintWriter output;
+    private Request request;
+    private StringBuilder result;
 
     private Socket clientSocket;
 
@@ -25,34 +27,32 @@ public class HttpServer {
             clientSocket = serverSocket.accept();
             output.println("Accepted Client Connection");
             setUpIOStreams();
-            clientOutput.printf(sendResponseFor(request()));
+            parseRequest();
+            clientOutput.printf(sendResponse());
             clientSocket.close();
+            output.println("Client connection closed");
         } catch (IOException ex) {
             output.println(ex);
         }
     }
 
-    private String request() throws IOException {
-        StringBuilder result = new StringBuilder();
+    private void parseRequest() throws IOException {
+        result = new StringBuilder();
         do {
             result.append((char) clientInput.read());
         } while (clientInput.available() > 0);
-        return result.toString();
+        request = new Request(result.toString());
+        request.extractDetails();
     }
 
-    private String sendResponseFor(String request) {
-        Routes routes = new Routes();
-        Response response = new Response();
+    private String sendResponse() {
+        RequestMatcher requestMatcher = new RequestMatcher();
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        ResponseHandler responseHandler = new ResponseHandler(request, requestMatcher);
+        String responseStatus = responseHandler.returnsStatusCode();
 
-        if (routes.isGetRequest(request)) {
-            return response.simpleGet();
-        } else if (routes.isNotFound(request)) {
-            return response.notFound();
-        } else if (routes.isPostRequest(request)) {
-            return response.echoResponse(request);
-        } else {
-            return "invalid request";
-        }
+        Response response = new Response(responseStatus, request.getBody(), responseBuilder);
+        return response.format();
     }
 
     private void setUpIOStreams() {
