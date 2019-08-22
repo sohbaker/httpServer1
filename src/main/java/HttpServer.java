@@ -23,7 +23,7 @@ public class HttpServer {
     public void communicate() {
         try {
             clientSocket = serverSocket.accept();
-            serverMessages.println("Accepted Client Connection");
+            serverMessages.println("Accepted Client connection");
             setUpIOStreams();
             parseRequest();
             clientOutput.printf(sendResponse());
