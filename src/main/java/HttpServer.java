@@ -35,6 +35,7 @@ public class HttpServer {
     }
 
     private void parseRequest() throws IOException {
+<<<<<<< HEAD
         StringBuilder result = new StringBuilder();
         do {
             result.append((char) clientInput.read());
@@ -51,6 +52,27 @@ public class HttpServer {
 
         Response response = new Response(responseStatus, request.getBody(), responseBuilder);
         return response.format();
+=======
+        do {
+            result.append((char) clientInput.read());
+        } while (clientInput.available() > 0);
+    }
+
+    private String sendResponse() {
+        Routes routes = new Routes();
+        Response response = new Response();
+        request = result.toString();
+
+        if (routes.isGetRequest(request)) {
+            return response.simpleGet();
+        } else if (routes.isNotFound(request)) {
+            return response.notFound();
+        } else if (routes.isPostRequest(request)) {
+            return response.echoResponse(request);
+        } else {
+            return "invalid request";
+        }
+>>>>>>> master
     }
 
     private void setUpIOStreams() {
