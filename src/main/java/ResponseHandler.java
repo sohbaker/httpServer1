@@ -7,18 +7,18 @@ public class ResponseHandler {
         this.matcher = matcher;
     }
 
-    public String getsEnumName() {
+    private String getEnumNameForRequestLine() {
         String requestLine = request.getFirstLine();
 
         for (RequestLine line : RequestLine.values()) {
-            if (line.getLine().equalsIgnoreCase(requestLine)) {
+            if (requestLine.contains(line.getLine())) {
                 return line.name();
             }
         }
         return RequestLine.INVALID.toString();
     }
 
-    public String returnsStatusCode() {
-        return matcher.getResponseStatusFor(RequestLine.valueOf(getsEnumName()));
+    public String getResponseStatusCode() {
+        return matcher.getResponseStatusFor(RequestLine.valueOf(getEnumNameForRequestLine()));
     }
 }
