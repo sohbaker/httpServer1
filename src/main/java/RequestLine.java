@@ -1,6 +1,7 @@
 public enum RequestLine {
     SIMPLE_GET("GET /simple_get"),
     NOT_FOUND("GET /not_found_resource"),
+    GET_REDIRECT("GET /redirect"),
     SIMPLE_HEAD("HEAD /simple_get"),
     HEAD_NO_BODY("HEAD /get_with_body"),
     GET_ONLY_HEAD("GET /get_with_body"),

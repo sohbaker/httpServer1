@@ -12,6 +12,9 @@ public class RequestMatcher {
             case POST_ECHO:
                 responseStatus = StatusCode._200.getMessage();
                 break;
+            case GET_REDIRECT:
+                responseStatus = StatusCode._301.getMessage();
+                break;
             case NOT_FOUND:
                 responseStatus = StatusCode._404.getMessage();
                 break;
@@ -27,6 +30,10 @@ public class RequestMatcher {
     public List<String> getResponseHeadersFor(RequestLine requestLine) {
         List<String> headers = new ArrayList<>();
         switch (requestLine) {
+            case GET_REDIRECT:
+                headers.add("Location: http://127.0.0.1:5000/simple_get");
+                headers.add("Date: " + new DateHeader().getDate());
+                break;
             case GET_ONLY_HEAD:
                 headers.add("Allow: " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString());
                 headers.add("Date: " + new DateHeader().getDate());
