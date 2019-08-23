@@ -36,22 +36,18 @@ public class RequestMatcher {
         switch (requestLine) {
             case GET_REDIRECT:
                 headers.add("Location: http://127.0.0.1:5000/simple_get");
-                headers.add("Date: " + new DateHeader().getDate());
                 break;
             case GET_ONLY_HEAD:
                 headers.add("Allow: " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString());
-                headers.add("Date: " + new DateHeader().getDate());
                 break;
             case OPTIONS_2_GET:
                 headers.add("Allow: " + Method.GET.toString() + ", " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString() + ", " + Method.PUT.toString() + ", " + Method.POST.toString());
-                headers.add("Date: " + new DateHeader().getDate());
                 break;
             case OPTIONS_GET:
                 headers.add("Allow: " + Method.GET.toString() + ", " + Method.HEAD.toString() + ", " + Method.OPTIONS.toString());
-                headers.add("Date: " + new DateHeader().getDate());
                 break;
             default:
-                headers.add("Date: " + new DateHeader().getDate());
+                headers.add("");
         }
         return headers;
     }
