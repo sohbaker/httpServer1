@@ -7,7 +7,7 @@ import java.util.List;
 public class Response {
     private String protocol = Protocol._1_1.getVersion();
     private String statusCode;
-    private List<String> headers;
+    private List headers;
     private String body;
     private ResponseBuilder responseBuilder;
 
@@ -19,9 +19,7 @@ public class Response {
     }
 
     public String format() {
-        responseBuilder.setStatusLine(protocol, statusCode);
-        responseBuilder.setHeaders(headers);
-        responseBuilder.setBody(body);
+        responseBuilder.setStatusLine(protocol, statusCode).setHeaders(headers).setBody(body);
 
         return responseBuilder.build().toString();
     }
