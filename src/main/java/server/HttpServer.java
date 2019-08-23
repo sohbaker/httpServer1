@@ -26,7 +26,7 @@ class HttpServer {
         }
     }
 
-    public void communicate() {
+    private void communicate() {
         try {
             clientSocket = serverSocket.accept();
             serverMessages.println("Accepted Client connection");
@@ -35,6 +35,16 @@ class HttpServer {
             clientOutput.printf(sendResponse());
             clientSocket.close();
             serverMessages.println("Client connection closed");
+        } catch (IOException ex) {
+            serverMessages.println(ex);
+        }
+    }
+
+    private void setUpIOStreams() {
+        try {
+            clientInput = clientSocket.getInputStream();
+            clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+            serverMessages.println("IO streams created");
         } catch (IOException ex) {
             serverMessages.println(ex);
         }
@@ -58,15 +68,5 @@ class HttpServer {
 
         Response response = new Response(responseStatus, headers, request.getBody(), responseBuilder);
         return response.format();
-    }
-
-    private void setUpIOStreams() {
-        try {
-            clientInput = clientSocket.getInputStream();
-            clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
-            serverMessages.println("IO streams created");
-        } catch (IOException ex) {
-            serverMessages.println(ex);
-        }
     }
 }
