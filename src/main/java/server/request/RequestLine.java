@@ -1,3 +1,5 @@
+package server.request;
+
 public enum RequestLine {
     SIMPLE_GET("GET /simple_get"),
     NOT_FOUND("GET /not_found_resource"),

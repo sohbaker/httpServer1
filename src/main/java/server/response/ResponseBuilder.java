@@ -1,3 +1,7 @@
+package server.response;
+
+import server.helper.ControlCharacter;
+
 import java.util.List;
 
 public class ResponseBuilder {
@@ -29,7 +33,7 @@ public class ResponseBuilder {
     private String formatHeaders(List<String> headers) {
         StringBuilder string = new StringBuilder();
         for (String header: headers) {
-            string = string.append(header).append(CRLF);
+            string.append(header).append(CRLF);
         }
 
         return string.append(CRLF).toString();

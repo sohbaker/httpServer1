@@ -1,3 +1,7 @@
+package server.response;
+
+import server.helper.Protocol;
+
 import java.util.List;
 
 public class Response {

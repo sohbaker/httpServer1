@@ -1,3 +1,5 @@
+package server.request;
+
 public class RequestValidator {
     private boolean isValidMethod(String requestMethod) {
         for (Method method : Method.values()) {

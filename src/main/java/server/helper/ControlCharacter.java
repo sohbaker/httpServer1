@@ -1,3 +1,5 @@
+package server.helper;
+
 public class ControlCharacter {
     public String space() {
         return " ";

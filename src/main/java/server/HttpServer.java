@@ -1,13 +1,18 @@
+package server;
+
+import server.request.*;
+import server.response.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.List;
 
-public class HttpServer {
+class HttpServer {
     private ServerSocket serverSocket;
     private InputStream clientInput;
     private PrintWriter clientOutput;
     private PrintWriter serverMessages;
-    private Request request;
+    private server.request.Request request;
     private Socket clientSocket;
 
     public HttpServer(ServerSocket serverSocket, PrintWriter serverMessages) {
