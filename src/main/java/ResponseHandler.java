@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class ResponseHandler {
     private Request request;
     private RequestMatcher matcher;
@@ -7,7 +9,15 @@ public class ResponseHandler {
         this.matcher = matcher;
     }
 
-    private String getEnumNameForRequestLine() {
+    public String getResponseStatus() {
+        return matcher.getResponseStatusFor(RequestLine.valueOf(getResponseEnumNameForRequestLine()));
+    }
+
+    public List<String> getResponseHeaders() {
+        return matcher.getResponseHeadersFor(RequestLine.valueOf(getResponseEnumNameForRequestLine()));
+    }
+
+    private String getResponseEnumNameForRequestLine() {
         String requestLine = request.getFirstLine();
 
         for (RequestLine line : RequestLine.values()) {
@@ -16,9 +26,5 @@ public class ResponseHandler {
             }
         }
         return RequestLine.INVALID.toString();
-    }
-
-    public String getResponseStatusCode() {
-        return matcher.getResponseStatusFor(RequestLine.valueOf(getEnumNameForRequestLine()));
     }
 }

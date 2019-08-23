@@ -13,7 +13,7 @@ public class ResponseHandlerTest {
 
         request.extractDetails();
 
-        assertThat(responseHandler.getResponseStatusCode(), containsString("200"));
+        assertThat(responseHandler.getResponseStatus(), containsString("200"));
     }
 
     @Test
@@ -25,6 +25,6 @@ public class ResponseHandlerTest {
 
         request.extractDetails();
 
-        assertThat(responseHandler.getResponseStatusCode(), containsString("400"));
+        assertThat(responseHandler.getResponseStatus(), containsString("400"));
     }
 }
