@@ -5,16 +5,10 @@ import server.helper.ControlCharacter;
 public class Request {
     private String clientRequest;
     private String CRLF = new ControlCharacter().CRLF();
-    private String space = new ControlCharacter().space();
-    private String method;
     private String headerLine;
 
     public Request(String clientRequest) {
         this.clientRequest = clientRequest;
-    }
-    
-    public String getMethod() {
-        return method;
     }
 
     public String getFirstLine() {
@@ -35,7 +29,6 @@ public class Request {
         String[] headerBody = splitRequestIntoHeaderAndBody();
         String[] headerAsLines = splitHeaderIntoLines(headerBody[0]);
         this.headerLine = headerAsLines[0];
-        splitFirstLineOfHeader(headerLine);
     }
 
     private String[] splitRequestIntoHeaderAndBody() {
@@ -48,10 +41,5 @@ public class Request {
 
     private String[] splitHeaderIntoLines(String header) {
         return header.split(CRLF);
-    }
-
-    private void splitFirstLineOfHeader(String firstLine) {
-        String[] splitMethodTarget = firstLine.split(space);
-        this.method = splitMethodTarget[0];
     }
 }
