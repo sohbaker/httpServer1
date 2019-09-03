@@ -1,3 +1,7 @@
+package server.response;
+
+import server.helper.Protocol;
+
 import java.util.List;
 
 public class Response {
@@ -7,7 +11,7 @@ public class Response {
     private String body;
     private ResponseBuilder responseBuilder;
 
-    public Response(String statusCode, List headers, String body, ResponseBuilder responseBuilder) {
+    public Response(String statusCode, List<String> headers, String body, ResponseBuilder responseBuilder) {
         this.statusCode = statusCode;
         this.headers = headers;
         this.body = body;
@@ -15,9 +19,7 @@ public class Response {
     }
 
     public String format() {
-        responseBuilder.setStatusLine(protocol, statusCode);
-        responseBuilder.setHeaders(headers);
-        responseBuilder.setBody(body);
+        responseBuilder.setStatusLine(protocol, statusCode).setHeaders(headers).setBody(body);
 
         return responseBuilder.build().toString();
     }

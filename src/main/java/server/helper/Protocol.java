@@ -1,3 +1,5 @@
+package server.helper;
+
 public enum Protocol {
     _1_1("HTTP/1.1");
 

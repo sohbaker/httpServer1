@@ -1,13 +1,18 @@
+package server;
+
+import server.request.*;
+import server.response.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.List;
 
-public class HttpServer {
+class HttpServer {
     private ServerSocket serverSocket;
     private InputStream clientInput;
     private PrintWriter clientOutput;
     private PrintWriter serverMessages;
-    private Request request;
+    private server.request.Request request;
     private Socket clientSocket;
 
     public HttpServer(ServerSocket serverSocket, PrintWriter serverMessages) {
@@ -21,7 +26,7 @@ public class HttpServer {
         }
     }
 
-    public void communicate() {
+    private void communicate() {
         try {
             clientSocket = serverSocket.accept();
             serverMessages.println("Accepted Client connection");
@@ -30,6 +35,16 @@ public class HttpServer {
             clientOutput.printf(sendResponse());
             clientSocket.close();
             serverMessages.println("Client connection closed");
+        } catch (IOException ex) {
+            serverMessages.println(ex);
+        }
+    }
+
+    private void setUpIOStreams() {
+        try {
+            clientInput = clientSocket.getInputStream();
+            clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+            serverMessages.println("IO streams created");
         } catch (IOException ex) {
             serverMessages.println(ex);
         }
@@ -53,15 +68,5 @@ public class HttpServer {
 
         Response response = new Response(responseStatus, headers, request.getBody(), responseBuilder);
         return response.format();
-    }
-
-    private void setUpIOStreams() {
-        try {
-            clientInput = clientSocket.getInputStream();
-            clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
-            serverMessages.println("IO streams created");
-        } catch (IOException ex) {
-            serverMessages.println(ex);
-        }
     }
 }

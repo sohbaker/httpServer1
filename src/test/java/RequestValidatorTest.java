@@ -1,4 +1,5 @@
 import org.junit.*;
+import server.request.RequestValidator;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;

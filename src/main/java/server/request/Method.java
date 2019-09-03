@@ -1,3 +1,5 @@
+package server.request;
+
 public enum Method {
     GET,
     HEAD,

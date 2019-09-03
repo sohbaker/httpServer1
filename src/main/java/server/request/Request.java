@@ -1,3 +1,7 @@
+package server.request;
+
+import server.helper.ControlCharacter;
+
 public class Request {
     private String clientRequest;
     private String CRLF = new ControlCharacter().CRLF();
