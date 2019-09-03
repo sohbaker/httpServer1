@@ -1,4 +1,4 @@
-package server.router;
+package server.route;
 
 import server.request.Request;
 
@@ -8,4 +8,6 @@ public class Router {
     public Router(Request request) {
         this.request = request;
     }
+
+
 }
