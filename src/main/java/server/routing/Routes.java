@@ -1,4 +1,5 @@
-package server.route;
+package server.routing;
 
 public class Routes {
+
 }
