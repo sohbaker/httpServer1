@@ -1,5 +1,7 @@
 import org.junit.*;
+import server.request.Request;
 import server.request.RequestMatcher;
+import server.response.ResponseHandler;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
