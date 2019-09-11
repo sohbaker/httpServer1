@@ -14,8 +14,8 @@ public class RouteBuilderTest {
 
         Route route = RouteBuilder.build(requestMethod, requestPath, handler);
 
-        assertEquals(requestMethod, route.getMethod());
-        assertEquals(requestPath, route.getPath());
+        assertEquals(requestMethod, route.getRequestMethod());
+        assertEquals(requestPath, route.getRequestPath());
         assertEquals(handler, route.getHandler());
     }
 }

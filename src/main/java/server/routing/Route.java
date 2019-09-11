@@ -3,16 +3,12 @@ package server.routing;
 import server.request.Method;
 
 public class Route {
-    private Method method;
-    private String requestPath;
-    private FunctionalHandler handler;
-
-    public Route setMethod(Method method) {
-        this.method = method;
+    public Route setRequestMethod(Method method) {
+        this.requestMethod = method;
         return this;
     }
 
-    public Route setPath(String path) {
+    public Route setRequestPath(String path) {
         this.requestPath = path;
         return this;
     }
@@ -22,15 +18,19 @@ public class Route {
         return this;
     }
 
-    public Method getMethod() {
-        return this.method;
+    public Method getRequestMethod() {
+        return this.requestMethod;
     }
 
-    public String getPath(){
+    public String getRequestPath(){
         return this.requestPath;
     }
 
     public FunctionalHandler getHandler() {
         return this.handler;
     }
+
+    private Method requestMethod;
+    private String requestPath;
+    private FunctionalHandler handler;
 }

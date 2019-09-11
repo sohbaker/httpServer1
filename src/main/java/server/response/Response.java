@@ -1,26 +1,42 @@
 package server.response;
 
-import server.helper.Protocol;
+import server.helper.*;
 
 import java.util.List;
 
 public class Response {
-    private String protocol = Protocol._1_1.getVersion();
-    private String statusCode;
-    private List<String> headers;
-    private String body;
-    private ResponseBuilder responseBuilder;
+    public String statusLine;
+    public String headers;
+    public String body;
 
-    public Response(String statusCode, List<String> headers, String body, ResponseBuilder responseBuilder) {
-        this.statusCode = statusCode;
-        this.headers = headers;
-        this.body = body;
-        this.responseBuilder = responseBuilder;
+    public Response setStatusLine(StatusCode statusCode) {
+        this.statusLine = protocol + space + statusCode.toString() + CRLF;
+        return this;
     }
 
-    public String format() {
-        responseBuilder.setStatusLine(protocol, statusCode).setHeaders(headers).setBody(body);
+    public Response setHeaders(List<String> headersList) {
+        if (headersList != null) {
+            this.headers = formatHeaders(headersList);
+        } else {
+            this.headers = "";
+        }
+        return this;
+    }
 
-        return responseBuilder.build().toString();
+    public Response setBody(String body) {
+        this.body = CRLF + body;
+        return this;
+    }
+
+    private String protocol = Protocol._1_1.getVersion();
+    private String space = new ControlCharacter().space();
+    private String CRLF = new ControlCharacter().CRLF();
+
+    private String formatHeaders(List<String> headers) {
+        StringBuilder string = new StringBuilder();
+        for (String header: headers) {
+            string.append(header).append(CRLF);
+        }
+        return string.toString();
     }
 }
