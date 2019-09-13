@@ -6,15 +6,27 @@ import server.response.*;
 public class Conf {
     public Routes setRoutes() {
         return new Routes()
-                .addRoute(defaultSuccessHandler(Method.GET, "/simple_get"))
-                .addRoute(defaultSuccessHandler(Method.HEAD, "simple_get"))
-                .addRoute(defaultSuccessHandler(Method.HEAD, "/get_with_body"))
-                .addRoute(defaultSuccessHandler(Method.OPTIONS, "/method_options"))
-                .addRoute(defaultSuccessHandler(Method.OPTIONS, "/method_options2"))
-                .addRoute(defaultSuccessHandler(Method.POST, "/echo_body"))
+                .add(routeWithDefaultHandler(Method.GET, "/simple_get"))
+                .add(routeWithDefaultHandler(Method.HEAD, "/simple_get"))
+                .add(routeWithDefaultHandler(Method.HEAD, "/get_with_body"))
+                .add(routeWithDefaultHandler(Method.OPTIONS, "/get_with_body"))
+                .add(routeWithDefaultHandler(Method.GET, "/method_options"))
+                .add(routeWithDefaultHandler(Method.HEAD, "/method_options"))
+                .add(routeWithDefaultHandler(Method.OPTIONS, "/method_options"))
+                .add(routeWithDefaultHandler(Method.GET, "/method_options2"))
+                .add(routeWithDefaultHandler(Method.HEAD, "/method_options2"))
+                .add(routeWithDefaultHandler(Method.OPTIONS, "/method_options2"))
+                .add(routeWithDefaultHandler(Method.PUT, "/method_options2"))
+                .add(routeWithDefaultHandler(Method.POST, "/method_options2"))
+                .add(routeWithDefaultHandler(Method.POST, "/echo_body"))
+                .add(routeWithRedirectHandler(Method.GET, "/redirect"));
     }
 
-    private Route defaultSuccessHandler(Method method, String path) {
-        return RouteBuilder.build(method, path, (request) -> new ResponseBuilder().build(StatusCode._200, null, request.getBody()));
+    private Route routeWithDefaultHandler(Method method, String path) {
+        return RouteBuilder.build(method, path, (request) -> new ResponseBuilder().build(StatusCode._200, null, null, request.getBody()));
+    }
+
+    private Route routeWithRedirectHandler(Method method, String path) {
+        return RouteBuilder.build(method, path, (request) -> new ResponseBuilder().build(StatusCode._301, "Location", "http://127.0.0.1:5000/simple_get", request.getBody()));
     }
 }

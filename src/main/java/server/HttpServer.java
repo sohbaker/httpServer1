@@ -1,11 +1,10 @@
 package server;
 
 import server.request.*;
-import server.response.*;
+import server.routing.*;
 
 import java.io.*;
 import java.net.*;
-import java.util.List;
 
 class HttpServer {
     private ServerSocket serverSocket;
@@ -26,7 +25,7 @@ class HttpServer {
         }
     }
 
-    private void communicate() {
+    public void communicate() {
         try {
             clientSocket = serverSocket.accept();
             serverMessages.println("Accepted Client connection");
@@ -55,18 +54,13 @@ class HttpServer {
         do {
             result.append((char) clientInput.read());
         } while (clientInput.available() > 0);
-        request = new Request(result.toString());
-        request.extractDetails();
+        request = new Request().extractDetails(result.toString());
     }
 
     private String sendResponse() {
-        RequestMatcher requestMatcher = new RequestMatcher();
-        ResponseBuilder responseBuilder = new ResponseBuilder();
-        ResponseHandler responseHandler = new ResponseHandler(request, requestMatcher);
-        String responseStatus = responseHandler.getResponseStatus();
-        List<String> headers = responseHandler.getResponseHeaders();
-
-        Response response = new Response(responseStatus, headers, request.getBody(), responseBuilder);
-        return response.format();
+        Conf config = new Conf();
+        Routes routes = config.setRoutes();
+        RouteHandler routeHandler = new RouteHandler(routes);
+        return routeHandler.getResponse(request).toString();
     }
 }

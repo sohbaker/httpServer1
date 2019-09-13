@@ -1,3 +1,5 @@
+package server;
+
 import org.junit.*;
 import java.io.*;
 import java.net.*;

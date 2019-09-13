@@ -1,12 +1,10 @@
 package server.response;
 
-import java.util.List;
-
 public class ResponseBuilder {
-    public Response build(StatusCode statusCode, List<String> headersList, String body) {
+    public Response build(StatusCode statusCode, String headerName, String headerValue, String body) {
         return new Response()
                 .setStatusLine(statusCode)
-                .setHeaders(headersList)
+                .setHeaders(headerName, headerValue)
                 .setBody(body);
     }
 }

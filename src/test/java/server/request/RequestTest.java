@@ -1,3 +1,5 @@
+package server.request;
+
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -8,24 +10,21 @@ public class RequestTest {
     @Before
     public void setUpDummy() {
         String dummyRequest = "GET /simple_get HTTP/1.1\r\n\r\nbody text";
-        request = new Request(dummyRequest);
+        request = new Request().extractDetails(dummyRequest);
     }
 
     @Test
-    public void extractsRequestMethod() {
-        request.extractDetails();
+    public void returnsTheRequestMethod() {
         assertEquals(request.getMethod(), "GET");
     }
 
     @Test
-    public void extractsFirstLineOfRequest() {
-        request.extractDetails();
-        assertEquals(request.getFirstLine(), "GET /simple_get HTTP/1.1");
+    public void returnsTheRequestPath() {
+        assertEquals(request.getPath(), "/simple_get");
     }
 
     @Test
-    public void extractsBodyOfRequest() {
-        request.extractDetails();
+    public void returnsTheRequestBody() {
         assertEquals(request.getBody(), "body text");
     }
 }
