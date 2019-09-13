@@ -3,11 +3,16 @@ package server.response;
 import server.helper.*;
 
 public class Response {
-    public String statusLine;
-    public String headers;
-    public String body;
+    private ControlCharacter character = new ControlCharacter();
+    private String CRLF = character.CRLF();
+    private String statusLine;
+    private String headers;
+    private String body;
 
     public Response setStatusLine(StatusCode statusCode) {
+        String protocol = Protocol._1_1.getVersion();
+        String space = character.space();
+
         this.statusLine = protocol + space + statusCode.getMessage() + CRLF;
         return this;
     }
@@ -30,13 +35,10 @@ public class Response {
         return this.statusLine + this.headers + this.body;
     }
 
-    private String protocol = Protocol._1_1.getVersion();
-    private String space = new ControlCharacter().space();
-    private String CRLF = new ControlCharacter().CRLF();
-
     private String formatHeaders(String name, String value) {
-        StringBuilder headers = new StringBuilder();
-        headers.append(name).append(": ").append(value);
+        String separator = character.separator();
+        StringBuilder headers = new StringBuilder().append(name).append(separator).append(value).append(CRLF);
+
         return headers.toString();
     }
 }
