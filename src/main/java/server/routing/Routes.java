@@ -3,7 +3,7 @@ package server.routing;
 import java.util.*;
 
 public class Routes {
-    private Map<String, ArrayList<Route>> activePathsAndRoutes = new HashMap<>();
+    private Map<String, ArrayList<Route>> validPathsAndRoutes = new HashMap<>();
 
     public Routes add(Route route) {
         if (isExistingPath(route.getRequestPath())) {
@@ -15,15 +15,11 @@ public class Routes {
     }
 
     public boolean isExistingPath(String requestPath) {
-        for (String key : activePathsAndRoutes.keySet())
-            if (key.equals(requestPath)) {
-                return true;
-            }
-        return false;
+        return validPathsAndRoutes.containsKey(requestPath);
     }
 
     public Route getASingleRoute(String requestPath, String requestMethod) {
-        List<Route> routes = activePathsAndRoutes.get(requestPath);
+        List<Route> routes = validPathsAndRoutes.get(requestPath);
 
         for (Route route : routes) {
             if (route.getRequestMethod().toString().equals(requestMethod)) {
@@ -33,9 +29,10 @@ public class Routes {
         return null;
     }
 
-    public List<String> getValidMethods(String requestPath) {
+    public List<String> getValidMethodsForPath(String requestPath) {
         List<String> validMethods = new ArrayList<>();
-        List<Route> routesForPath = activePathsAndRoutes.get(requestPath);
+        List<Route> routesForPath = validPathsAndRoutes.get(requestPath);
+
         for (Route route : routesForPath) {
             validMethods.add(route.getRequestMethod().toString());
         }
@@ -44,7 +41,7 @@ public class Routes {
 
     private void addRouteToExistingPath(Route route) {
         String key = route.getRequestPath();
-        activePathsAndRoutes.get(key).add(route);
+        validPathsAndRoutes.get(key).add(route);
     }
 
     private void createNewPath(Route route) {
@@ -52,6 +49,6 @@ public class Routes {
         ArrayList<Route> routeListForPath = new ArrayList<>();
 
         routeListForPath.add(route);
-        activePathsAndRoutes.put(key, routeListForPath);
+        validPathsAndRoutes.put(key, routeListForPath);
     }
 }

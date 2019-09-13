@@ -13,9 +13,10 @@ public class RouteHandler {
     }
 
     public Response getResponse(Request request) {
-        String path = request.getPath();
-        if (!isValidMethod(request.getMethod()) || !isValidPath(path)) {
+        if (!isValidPath(request)) {
             return buildNotFoundResponse(request);
+        } else if (!isValidMethod(request)) {
+            return buildBadRequestResponse(request);
         } else if (!isValidMethodForPath(request)) {
             return buildNotAllowedResponse(request);
         } else if (isOptionsRequest(request)) {
@@ -27,11 +28,11 @@ public class RouteHandler {
 
     private boolean isValidMethodForPath(Request request) {
         String path = request.getPath();
-        return routes.getValidMethods(path).contains(request.getMethod());
+        return routes.getValidMethodsForPath(path).contains(request.getMethod());
     }
 
     private Response buildNotAllowedResponse(Request request) {
-        List<String> validRequestMethods = routes.getValidMethods(request.getPath());
+        List<String> validRequestMethods = routes.getValidMethodsForPath(request.getPath());
         String validMethodsString = String.join(", ", validRequestMethods);
 
         return new ResponseBuilder().build(StatusCode._405, "Allow", validMethodsString, request.getBody());
@@ -42,23 +43,27 @@ public class RouteHandler {
     }
 
     private Response buildOptionsResponse(Request request) {
-        List<String> validRequestMethods = routes.getValidMethods(request.getPath());
+        List<String> validRequestMethods = routes.getValidMethodsForPath(request.getPath());
         String validMethodsString = String.join(", ", validRequestMethods);
 
         return new ResponseBuilder().build(StatusCode._200, "Allow", validMethodsString, request.getBody());
     }
 
-    private boolean isValidMethod(String requestMethod) {
+    private boolean isValidMethod(Request request) {
         for (Method method : Method.values()) {
-            if (method.toString().equalsIgnoreCase(requestMethod)) {
+            if (method.toString().equalsIgnoreCase(request.getMethod())) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isValidPath(String path) {
-        return routes.isExistingPath(path);
+    private Response buildBadRequestResponse(Request request) {
+        return new ResponseBuilder().build(StatusCode._400,null, null, request.getBody());
+    }
+
+    private boolean isValidPath(Request request) {
+        return routes.isExistingPath(request.getPath());
     }
 
     private Response buildNotFoundResponse(Request request) {
