@@ -27,6 +27,8 @@ public class Conf {
     }
 
     private Route routeWithRedirectHandler(Method method, String path) {
-        return RouteBuilder.build(method, path, (request) -> new ResponseBuilder().build(StatusCode._301, "Location", URLBuilder.build(request, "/simple_get").toString(), request.getBody()));
+        String scheme = "http";
+        String redirectTo = "/simple_get";
+        return RouteBuilder.build(method, path, (request) -> new ResponseBuilder().build(StatusCode._301, "Location", new URL(scheme, request.getHost(), redirectTo).build(), request.getBody()));
     }
 }
