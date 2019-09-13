@@ -9,22 +9,27 @@ public class RequestTest {
 
     @Before
     public void setUpDummy() {
-        String dummyRequest = "GET /simple_get HTTP/1.1\r\n\r\nbody text";
+        String dummyRequest = "GET /simple_get HTTP/1.1\r\nHost: localhost:3000\r\n\r\nbody text";
         request = new Request().extractDetails(dummyRequest);
     }
 
     @Test
     public void returnsTheRequestMethod() {
-        assertEquals(request.getMethod(), "GET");
+        assertEquals("GET", request.getMethod());
     }
 
     @Test
     public void returnsTheRequestPath() {
-        assertEquals(request.getPath(), "/simple_get");
+        assertEquals("/simple_get", request.getPath());
     }
 
     @Test
     public void returnsTheRequestBody() {
-        assertEquals(request.getBody(), "body text");
+        assertEquals("body text", request.getBody());
+    }
+
+    @Test
+    public void returnsTheRequestHost() {
+        assertEquals("localhost:3000", request.getHost());
     }
 }
