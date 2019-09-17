@@ -21,32 +21,19 @@ public class RouteHandler {
             return buildNotAllowedResponse(request);
         } else if (isOptionsRequest(request)) {
             return buildOptionsResponse(request);
+        } else if (isHeadRequest(request)) {
+            return buildHeadResponse();
         } else {
             return getRouteHandler(request);
         }
     }
 
-    private boolean isValidMethodForPath(Request request) {
-        String path = request.getPath();
-        return routes.getValidMethodsForPath(path).contains(request.getMethod());
+    private boolean isValidPath(Request request) {
+        return routes.isExistingPath(request.getPath());
     }
 
-    private Response buildNotAllowedResponse(Request request) {
-        List<String> validRequestMethods = routes.getValidMethodsForPath(request.getPath());
-        String validMethodsString = String.join(", ", validRequestMethods);
-
-        return new ResponseBuilder().build(StatusCode._405, "Allow", validMethodsString, request.getBody());
-    }
-
-    private boolean isOptionsRequest(Request request) {
-        return Method.OPTIONS.toString().equalsIgnoreCase(request.getMethod());
-    }
-
-    private Response buildOptionsResponse(Request request) {
-        List<String> validRequestMethods = routes.getValidMethodsForPath(request.getPath());
-        String validMethodsString = String.join(", ", validRequestMethods);
-
-        return new ResponseBuilder().build(StatusCode._200, "Allow", validMethodsString, request.getBody());
+    private Response buildNotFoundResponse(Request request) {
+        return new ResponseBuilder().build(StatusCode._404,null, null, request.getBody());
     }
 
     private boolean isValidMethod(Request request) {
@@ -62,12 +49,34 @@ public class RouteHandler {
         return new ResponseBuilder().build(StatusCode._400,null, null, request.getBody());
     }
 
-    private boolean isValidPath(Request request) {
-        return routes.isExistingPath(request.getPath());
+    private boolean isValidMethodForPath(Request request) {
+        return routes.getMethodsForPath(request.getPath()).contains(request.getMethod());
     }
 
-    private Response buildNotFoundResponse(Request request) {
-        return new ResponseBuilder().build(StatusCode._404,null, null, request.getBody());
+    private Response buildNotAllowedResponse(Request request) {
+        List<String> validRequestMethods = routes.getMethodsForPath(request.getPath());
+        String validMethodsString = String.join(", ", validRequestMethods);
+
+        return new ResponseBuilder().build(StatusCode._405, "Allow", validMethodsString, request.getBody());
+    }
+
+    private boolean isOptionsRequest(Request request) {
+        return Method.OPTIONS.toString().equalsIgnoreCase(request.getMethod());
+    }
+
+    private Response buildOptionsResponse(Request request) {
+        List<String> validRequestMethods = routes.getMethodsForPath(request.getPath());
+        String validMethodsString = String.join(", ", validRequestMethods);
+
+        return new ResponseBuilder().build(StatusCode._200, "Allow", validMethodsString, request.getBody());
+    }
+
+    private boolean isHeadRequest(Request request) {
+        return Method.OPTIONS.toString().equalsIgnoreCase(request.getMethod());
+    }
+
+    private Response buildHeadResponse() {
+        return new ResponseBuilder().build(StatusCode._200, null, null, null);
     }
 
     private Response getRouteHandler(Request request) {
