@@ -8,9 +8,9 @@ public class RequestTest {
     private Request request;
 
     @Before
-    public void setUpDummy() {
-        String dummyRequest = "GET /simple_get HTTP/1.1\r\nHost: localhost:3000\r\n\r\nbody text";
-        request = new Request().extractDetails(dummyRequest);
+    public void setUpFake() {
+        String fakeRequest = "GET /simple_get HTTP/1.1\r\nHost: localhost:3000\r\n\r\nbody text";
+        request = new Request().extractDetails(fakeRequest);
     }
 
     @Test
@@ -24,12 +24,12 @@ public class RequestTest {
     }
 
     @Test
-    public void returnsTheRequestBody() {
-        assertEquals("body text", request.getBody());
+    public void returnsTheRequestHost() {
+        assertEquals("localhost:3000", request.getHost());
     }
 
     @Test
-    public void returnsTheRequestHost() {
-        assertEquals("localhost:3000", request.getHost());
+    public void returnsTheRequestBody() {
+        assertEquals("body text", request.getBody());
     }
 }
