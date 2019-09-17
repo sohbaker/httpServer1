@@ -3,7 +3,7 @@ package server.routing;
 import server.request.Method;
 import server.response.*;
 
-public class Conf {
+public class Config {
     public Routes setRoutes() {
         return new Routes()
                 .add(routeWithDefaultHandler(Method.GET, "/simple_get"))
