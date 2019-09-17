@@ -5,7 +5,7 @@ import server.request.Method;
 public class Route {
     private Method requestMethod;
     private String requestPath;
-    private FunctionalHandler handler;
+    private RequestHandler handler;
 
     public Route setRequestMethod(Method method) {
         this.requestMethod = method;
@@ -17,7 +17,7 @@ public class Route {
         return this;
     }
 
-    public Route setHandler(FunctionalHandler handler) {
+    public Route setHandler(RequestHandler handler) {
         this.handler = handler;
         return this;
     }
@@ -30,7 +30,7 @@ public class Route {
         return this.requestPath;
     }
 
-    public FunctionalHandler getHandler() {
+    public RequestHandler getHandler() {
         return this.handler;
     }
 }

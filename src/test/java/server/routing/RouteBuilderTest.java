@@ -10,7 +10,7 @@ public class RouteBuilderTest {
     public void buildsANewRouteSetWithGivenValues() {
         Method requestMethod = Method.GET;
         String requestPath = "/hello";
-        FunctionalHandler handler = request -> null;
+        RequestHandler handler = request -> null;
 
         Route route = RouteBuilder.build(requestMethod, requestPath, handler);
 
