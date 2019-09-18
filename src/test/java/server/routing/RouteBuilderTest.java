@@ -9,13 +9,13 @@ public class RouteBuilderTest {
     @Test
     public void buildsANewRouteSetWithGivenValues() {
         Method requestMethod = Method.GET;
-        String requestPath = Path.SIMPLE_GET.getPath();
+        Path requestPath = Path.SIMPLE_GET;
         RequestHandler handler = request -> null;
 
         Route route = RouteBuilder.build(requestMethod, requestPath, handler);
 
         assertEquals(requestMethod, route.getRequestMethod());
-        assertEquals(requestPath, route.getRequestPath());
+        assertEquals(requestPath.getPath(), route.getRequestPath());
         assertEquals(handler, route.getHandler());
     }
 }

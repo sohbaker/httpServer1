@@ -13,7 +13,6 @@ public class RoutesTest {
     private MockRequestHandler requestHandler;
     private Map<String, ArrayList<Route>> allRoutesAndPaths;
     private List<Route> routesForSinglePath;
-    private String fakePath = "/a_path";
 
     @Before
     public void setUp() {
@@ -24,68 +23,77 @@ public class RoutesTest {
 
     @Test
     public void addsANewRouteWhenThePathDoesNotExist() {
-        Route mockRoute1 = RouteBuilder.build(Method.GET, fakePath, requestHandler);
+        Route mockRoute1 = RouteBuilder.build(Method.GET, Path.SIMPLE_GET, requestHandler);
 
         routes.add(mockRoute1);
 
+        String path = Path.SIMPLE_GET.getPath();
         allRoutesAndPaths = routes.getAllPathsAndRoutes();
 
-        assertTrue(allRoutesAndPaths.containsKey(fakePath));
+        assertTrue(allRoutesAndPaths.containsKey(path));
         assertEquals(1, allRoutesAndPaths.size());
     }
 
     @Test
     public void addsARouteToAnExistingPath() {
-        Route mockRoute1 = RouteBuilder.build(Method.GET, fakePath, requestHandler);
-        Route mockRoute2 = RouteBuilder.build(Method.OPTIONS, fakePath, requestHandler);
+        Route mockRoute1 = RouteBuilder.build(Method.GET, Path.SIMPLE_GET, requestHandler);
+        Route mockRoute2 = RouteBuilder.build(Method.OPTIONS, Path.SIMPLE_GET, requestHandler);
 
         routes.add(mockRoute1);
         routes.add(mockRoute2);
 
-        allRoutesAndPaths = routes.getAllPathsAndRoutes();
-        routesForSinglePath = routes.getRoutesForPath(fakePath);
+        String path = Path.SIMPLE_GET.getPath();
 
-        assertTrue(allRoutesAndPaths.containsKey(fakePath));
+        allRoutesAndPaths = routes.getAllPathsAndRoutes();
+        routesForSinglePath = routes.getRoutesForPath(path);
+
+        assertTrue(allRoutesAndPaths.containsKey(path));
         assertEquals(1, allRoutesAndPaths.size());
         assertEquals(2, routesForSinglePath.size());
     }
 
     @Test
     public void doesNotAddARouteIfItAlreadyExists() {
-        Route mockRoute1 = RouteBuilder.build(Method.GET, fakePath, requestHandler);
-        Route mockRoute2 = RouteBuilder.build(Method.OPTIONS, fakePath, requestHandler);
-        Route mockRoute3 = RouteBuilder.build(Method.OPTIONS, fakePath, requestHandler);
+        Route mockRoute1 = RouteBuilder.build(Method.GET, Path.SIMPLE_GET, requestHandler);
+        Route mockRoute2 = RouteBuilder.build(Method.OPTIONS, Path.SIMPLE_GET, requestHandler);
+        Route mockRoute3 = RouteBuilder.build(Method.OPTIONS, Path.SIMPLE_GET, requestHandler);
 
         routes.add(mockRoute1);
         routes.add(mockRoute2);
         routes.add(mockRoute3);
 
-        allRoutesAndPaths = routes.getAllPathsAndRoutes();
-        routesForSinglePath = routes.getRoutesForPath(fakePath);
+        String path = Path.SIMPLE_GET.getPath();
 
-        assertTrue(allRoutesAndPaths.containsKey(fakePath));
+        allRoutesAndPaths = routes.getAllPathsAndRoutes();
+        routesForSinglePath = routes.getRoutesForPath(path);
+
+        assertTrue(allRoutesAndPaths.containsKey(path));
         assertEquals(1, allRoutesAndPaths.size());
         assertEquals(2, routesForSinglePath.size());
     }
 
     @Test
     public void returnsASingleRoute() {
-        Route mockRoute1 = RouteBuilder.build(Method.GET, fakePath, requestHandler);
+        Route mockRoute1 = RouteBuilder.build(Method.GET, Path.SIMPLE_GET, requestHandler);
 
         routes.add(mockRoute1);
 
-        assertEquals(mockRoute1, routes.getASingleRoute(fakePath, Method.GET.toString()));
+        String path = Path.SIMPLE_GET.getPath();
+        String method = Method.GET.toString();
+
+        assertEquals(mockRoute1, routes.getASingleRoute(path, method));
     }
 
     @Test
     public void knowsTheValidMethodsForAPath() {
-        Route mockRoute1 = RouteBuilder.build(Method.GET, fakePath, requestHandler);
-        Route mockRoute2 = RouteBuilder.build(Method.OPTIONS, fakePath, requestHandler);
+        Route mockRoute1 = RouteBuilder.build(Method.GET, Path.SIMPLE_GET, requestHandler);
+        Route mockRoute2 = RouteBuilder.build(Method.OPTIONS, Path.SIMPLE_GET, requestHandler);
 
         routes.add(mockRoute1);
         routes.add(mockRoute2);
 
-        List<String> validMethods = routes.getMethodsForPath(fakePath);
+        String path = Path.SIMPLE_GET.getPath();
+        List<String> validMethods = routes.getMethodsForPath(path);
 
         assertTrue(validMethods.contains("GET"));
         assertTrue(validMethods.contains("OPTIONS"));
