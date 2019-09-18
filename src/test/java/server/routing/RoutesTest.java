@@ -1,8 +1,7 @@
 package server.routing;
 
 import org.junit.*;
-import server.constants.StatusCode;
-import server.constants.Method;
+import server.constants.*;
 import server.response.*;
 
 import java.util.*;

@@ -1,7 +1,7 @@
 package server.routing;
 
 import org.junit.*;
-import server.constants.Method;
+import server.constants.*;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,7 @@ public class RouteBuilderTest {
     @Test
     public void buildsANewRouteSetWithGivenValues() {
         Method requestMethod = Method.GET;
-        String requestPath = "/hello";
+        String requestPath = Path.SIMPLE_GET.getPath();
         RequestHandler handler = request -> null;
 
         Route route = RouteBuilder.build(requestMethod, requestPath, handler);
