@@ -58,7 +58,7 @@ class HttpServer {
     }
 
     private String sendResponse() {
-        Conf config = new Conf();
+        Config config = new Config();
         Routes routes = config.setRoutes();
         RouteHandler routeHandler = new RouteHandler(routes);
         return routeHandler.getResponse(request).toString();
