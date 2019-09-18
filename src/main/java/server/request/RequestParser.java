@@ -31,11 +31,11 @@ public class RequestParser {
     }
 
     public String body() {
-        String[] headerBody = splitAtBlankLine();
+        splitAtBlankLine();
         if (splitAtBlankLine().length >1) {
             return splitAtBlankLine()[SECOND_ELEMENT];
         }
-        return "";
+        return null;
     }
 
     public Request buildRequest() {
