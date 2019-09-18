@@ -17,7 +17,11 @@ public class RequestParser {
     }
 
     public String path() {
-        return getRequestLine()[SECOND_ELEMENT];
+        try {
+            return getRequestLine()[SECOND_ELEMENT];
+        } catch (Exception ArrayIndexOutOfBoundsException) {
+            return "";
+        }
     }
 
     public String host() {

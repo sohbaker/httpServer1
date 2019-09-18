@@ -1,66 +1,32 @@
 package server;
 
-import server.request.*;
-import server.routing.*;
-
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.Executor;
 
 class HttpServer {
     private ServerSocket serverSocket;
-    private InputStream clientInput;
-    private PrintWriter clientOutput;
-    private PrintWriter serverMessages;
-    private Request request;
-    private Socket clientSocket;
+    private Messages messages;
+    private Executor executor;
+    private int clientId = 0;
 
-    public HttpServer(ServerSocket serverSocket, PrintWriter serverMessages) {
+    public HttpServer(ServerSocket serverSocket, Messages messages, Executor executor) {
         this.serverSocket = serverSocket;
-        this.serverMessages = serverMessages;
+        this.messages = messages;
+        this.executor = executor;
     }
 
     public void start() {
-        while (true) {
-            communicate();
-        }
+        while (true) listenForConnections();
     }
 
-    public void communicate() {
+    public void listenForConnections() {
         try {
-            clientSocket = serverSocket.accept();
-            serverMessages.println("Accepted Client connection");
-            setUpIOStreams();
-            parseRequest();
-            clientOutput.printf(sendResponse());
-            clientSocket.close();
-            serverMessages.println("Client connection closed");
+            Socket clientSocket = serverSocket.accept();
+            clientId++;
+            executor.execute(new ClientHandler(clientSocket, messages, clientId));
         } catch (IOException ex) {
-            serverMessages.println(ex);
+            messages.showIOException(ex);
         }
-    }
-
-    private void setUpIOStreams() {
-        try {
-            clientInput = clientSocket.getInputStream();
-            clientOutput = new PrintWriter(clientSocket.getOutputStream(), true);
-            serverMessages.println("IO streams created");
-        } catch (IOException ex) {
-            serverMessages.println(ex);
-        }
-    }
-
-    private void parseRequest() throws IOException {
-        StringBuilder result = new StringBuilder();
-        do {
-            result.append((char) clientInput.read());
-        } while (clientInput.available() > 0);
-        request = new RequestParser(result.toString()).buildRequest();
-    }
-
-    private String sendResponse() {
-        Config config = new Config();
-        Routes routes = config.setRoutes();
-        RouteHandler routeHandler = new RouteHandler(routes);
-        return routeHandler.getResponse(request).toString();
     }
 }
