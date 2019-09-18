@@ -54,7 +54,7 @@ class HttpServer {
         do {
             result.append((char) clientInput.read());
         } while (clientInput.available() > 0);
-        request = new Request().extractDetails(result.toString());
+        request = new RequestParser(result.toString()).buildRequest();
     }
 
     private String sendResponse() {
