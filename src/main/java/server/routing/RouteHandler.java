@@ -74,7 +74,7 @@ public class RouteHandler {
     }
 
     private boolean isHeadRequest(Request request) {
-        return Method.OPTIONS.toString().equalsIgnoreCase(request.getMethod());
+        return Method.HEAD.toString().equalsIgnoreCase(request.getMethod());
     }
 
     private Response buildHeadResponse() {
