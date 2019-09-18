@@ -10,7 +10,8 @@ public class ResponseBuilderTest {
     public void returnsAResponse() {
         ResponseBuilder responseBuilder = new ResponseBuilder();
 
-        Response response = responseBuilder.build(StatusCode._200, null, null, "body");
-        assertThat(response.toString(), containsString("body"));
+        Response response = responseBuilder.build(StatusCode._200, "Test", "has a header", "and body");
+
+        assertEquals("HTTP/1.1 200 OK\r\nTest: has a header\r\n\r\nand body", response.toString());
     }
 }
