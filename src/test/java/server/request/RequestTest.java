@@ -6,30 +6,37 @@ import static org.junit.Assert.*;
 
 public class RequestTest {
     private Request request;
+    private String method;
+    private String path;
+    private String host;
+    private String body;
 
     @Before
     public void setUpDummy() {
-        String fakeRequest = "GET /simple_get HTTP/1.1\r\nHost: localhost:3000\r\n\r\nbody text";
-        request = new Request().extractDetails(fakeRequest);
+        method = "GET";
+        path = "/simple_get";
+        host = "localhost:3000";
+        body = "body text";
+        request = new Request(method, path, host, body);
     }
 
     @Test
     public void returnsTheRequestMethod() {
-        assertEquals("GET", request.getMethod());
+        assertEquals(method, request.getMethod());
     }
 
     @Test
     public void returnsTheRequestPath() {
-        assertEquals("/simple_get", request.getPath());
+        assertEquals(path, request.getPath());
     }
 
     @Test
     public void returnsTheRequestHost() {
-        assertEquals("localhost:3000", request.getHost());
+        assertEquals(host, request.getHost());
     }
 
     @Test
     public void returnsTheRequestBody() {
-        assertEquals("body text", request.getBody());
+        assertEquals(body, request.getBody());
     }
 }
