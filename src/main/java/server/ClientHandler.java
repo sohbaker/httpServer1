@@ -13,8 +13,6 @@ public class ClientHandler implements Runnable {
     private InputStream clientInput;
     private PrintWriter clientOutput;
     private Request request;
-    private boolean keepRunning = true;
-
 
     public ClientHandler(Socket clientSocket, Messages messages, int clientId) {
         this.clientSocket = clientSocket;
@@ -39,11 +37,8 @@ public class ClientHandler implements Runnable {
     }
 
     private void communicate() {
-        while (keepRunning) {
-            parseRequest();
-            sendResponse();
-            break;
-        }
+        parseRequest();
+        sendResponse();
         closeClient();
     }
 
@@ -54,7 +49,6 @@ public class ClientHandler implements Runnable {
                 result.append((char) clientInput.read());
             } while (clientInput.available() > 0);
             request = new RequestParser(result.toString()).buildRequest();
-            keepRunning = false;
         } catch (IOException ex) {
             serverMessages.showIOException(ex);
         }
