@@ -38,8 +38,6 @@ public class Response {
     }
 
     private String formatHeaders(String name, String value) {
-        StringBuilder headers = new StringBuilder().append(name).append(COLON).append(value).append(CRLF);
-
-        return headers.toString();
+        return new StringBuilder().append(name).append(COLON).append(value).append(CRLF).toString();
     }
 }
