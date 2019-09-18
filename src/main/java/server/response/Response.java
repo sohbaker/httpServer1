@@ -1,19 +1,17 @@
 package server.response;
 
-import server.helper.*;
+import server.constants.Protocol;
+
+import static server.constants.FormatHelpers.*;
 
 public class Response {
-    private ControlCharacter character = new ControlCharacter();
-    private String CRLF = character.CRLF();
     private String statusLine;
     private String headers;
     private String body;
 
     public Response setStatusLine(StatusCode statusCode) {
         String protocol = Protocol._1_1.getVersion();
-        String space = character.space();
-
-        this.statusLine = protocol + space + statusCode.getMessage() + CRLF;
+        this.statusLine = protocol + SPACE + statusCode.getMessage() + CRLF;
         return this;
     }
 
@@ -36,8 +34,7 @@ public class Response {
     }
 
     private String formatHeaders(String name, String value) {
-        String separator = character.separator();
-        StringBuilder headers = new StringBuilder().append(name).append(separator).append(value).append(CRLF);
+        StringBuilder headers = new StringBuilder().append(name).append(COLON).append(value).append(CRLF);
 
         return headers.toString();
     }
