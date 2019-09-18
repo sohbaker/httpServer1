@@ -1,7 +1,6 @@
 package server.routing;
 
-import server.constants.Method;
-import server.constants.Path;
+import server.constants.*;
 
 public class RouteBuilder {
     public static Route build(Method requestMethod, Path requestPath, RequestHandler handler) {

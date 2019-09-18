@@ -1,7 +1,6 @@
 package server.response;
 
-import server.constants.Protocol;
-import server.constants.StatusCode;
+import server.constants.*;
 
 import static server.constants.FormatHelpers.*;
 
