@@ -1,7 +1,7 @@
 package server.routing;
 
 import org.junit.*;
-import server.request.Method;
+import server.constants.Method;
 
 import static org.junit.Assert.*;
 

@@ -1,6 +1,7 @@
 package server.routing;
 
-import server.request.Method;
+import server.constants.StatusCode;
+import server.constants.Method;
 import server.response.*;
 
 public class Config {

@@ -1,8 +1,8 @@
 package server.response;
 
 import org.junit.Test;
+import server.constants.StatusCode;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 public class ResponseBuilderTest {

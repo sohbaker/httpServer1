@@ -1,4 +1,4 @@
-package server.request;
+package server.constants;
 
 public enum Method {
     GET,

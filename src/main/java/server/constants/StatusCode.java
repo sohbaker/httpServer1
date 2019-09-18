@@ -1,4 +1,4 @@
-package server.response;
+package server.constants;
 
 public enum StatusCode {
     _200("200 OK"),

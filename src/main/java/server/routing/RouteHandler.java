@@ -1,5 +1,7 @@
 package server.routing;
 
+import server.constants.Method;
+import server.constants.StatusCode;
 import server.request.*;
 import server.response.*;
 
