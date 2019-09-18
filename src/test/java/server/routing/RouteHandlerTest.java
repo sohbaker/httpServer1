@@ -2,7 +2,7 @@ package server.routing;
 
 import org.junit.*;
 import server.constants.StatusCode;
-import server.request.Request;
+import server.request.*;
 import server.response.*;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -21,7 +21,7 @@ public class RouteHandlerTest {
     @Test
     public void returnsEmptyResponseWithStatusCode200ForSimpleGetRequest() {
         String getRequest = "GET /simple_get HTTP/1.1\r\n\r\n";
-        Request fakeGetRequest = new Request().extractDetails(getRequest);
+        Request fakeGetRequest  = new RequestParser(getRequest).buildRequest();
 
         response = routeHandler.getResponse(fakeGetRequest);
 
@@ -31,7 +31,7 @@ public class RouteHandlerTest {
     @Test
     public void returnsEchoedResponseWithStatusCode200ForSimplePostRequest() {
         String postRequest = "POST /echo_body HTTP/1.1\r\n\r\nsome body";
-        Request fakePostRequest = new Request().extractDetails(postRequest);
+        Request fakePostRequest  = new RequestParser(postRequest).buildRequest();
 
         response = routeHandler.getResponse(fakePostRequest);
 
@@ -42,7 +42,8 @@ public class RouteHandlerTest {
     @Test
     public void returnsResponseWithStatusCode400ForABadRequest() {
         String badRequest = "INVALID /simple_get HTTP/1.1\r\n\r\n";
-        Request fakeBadRequest = new Request().extractDetails(badRequest);
+        Request fakeBadRequest  = new RequestParser(badRequest).buildRequest();
+
         response = routeHandler.getResponse(fakeBadRequest);
 
         assertThat(response.toString(), containsString(StatusCode._400.getMessage()));
@@ -51,7 +52,7 @@ public class RouteHandlerTest {
     @Test
     public void returnsResponseWithStatusCode404ForNotFoundRequest() {
         String notFoundRequest = "OPTIONS /fake_path HTTP/1.1\r\n\r\n";
-        Request fakeNotFoundRequest = new Request().extractDetails(notFoundRequest);
+        Request fakeNotFoundRequest  = new RequestParser(notFoundRequest).buildRequest();
 
         response = routeHandler.getResponse(fakeNotFoundRequest);
 
@@ -61,7 +62,7 @@ public class RouteHandlerTest {
     @Test
     public void returnsResponseWithStatusCode405WhenRequestMethodIsInvalidForPath() {
         String invalidPathRequest = "OPTIONS /simple_get HTTP/1.1\r\n\r\n";
-        Request fakeInvalidPathRequest = new Request().extractDetails(invalidPathRequest);
+        Request fakeInvalidPathRequest  = new RequestParser(invalidPathRequest).buildRequest();
 
         response = routeHandler.getResponse(fakeInvalidPathRequest);
 
@@ -71,7 +72,7 @@ public class RouteHandlerTest {
     @Test
     public void returnsAResponseWithAllowedMethodsHeaderForAnOptionsRequest() {
         String optionsRequest = "OPTIONS /method_options HTTP/1.1\r\n\r\n";
-        Request fakeOptionsRequest = new Request().extractDetails(optionsRequest);
+        Request fakeOptionsRequest  = new RequestParser(optionsRequest).buildRequest();
 
         response = routeHandler.getResponse(fakeOptionsRequest);
 
@@ -83,7 +84,7 @@ public class RouteHandlerTest {
     @Test
     public void returnsAResponseWithNoBodyForAHeadRequest() {
         String headRequest = "HEAD /get_with_body HTTP/1.1\r\n\r\n";
-        Request fakeHeadRequest = new Request().extractDetails(headRequest);
+        Request fakeHeadRequest  = new RequestParser(headRequest).buildRequest();
 
         response = routeHandler.getResponse(fakeHeadRequest);
         String[] splitResponse = response.toString().split("\r\n\r\n");

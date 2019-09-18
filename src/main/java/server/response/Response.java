@@ -26,7 +26,11 @@ public class Response {
     }
 
     public Response setBody(String body) {
-        this.body = CRLF + body;
+        if (body != null) {
+            this.body = CRLF + body;
+        } else {
+            this.body = "";
+        }
         return this;
     }
 
