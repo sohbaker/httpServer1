@@ -5,16 +5,24 @@ import server.helper.ControlCharacter;
 public class Request {
     private String CRLF = new ControlCharacter().CRLF();
     private String space = new ControlCharacter().space();
-    private String[] headerBody;
+    private String[] headerBodyStrings;
     private String method;
     private String path;
     private String host;
 
     public Request extractDetails(String clientRequest) {
-        headerBody = splitRequestIntoHeaderAndBody(clientRequest);
-        String[] headerAsLines = splitHeaderIntoLines(headerBody[0]);
+        headerBodyStrings = splitRequestIntoHeaderAndBody(clientRequest);
+        String[] headerAsLines = splitHeaderIntoLines(headerBodyStrings[0]);
         splitFirstLineOfHeader(headerAsLines[0]);
         return this;
+    }
+
+    private void setMethod(String method) {
+        this.method = method;
+    }
+
+    private void setPath(String path){
+        this.path = path;
     }
 
     private void setHost(String[] requestHeaders) {
@@ -26,18 +34,6 @@ public class Request {
         }
     }
 
-    private void setMethod(String method) {
-        this.method = method;
-    }
-
-    private void setPath(String path){
-        this.path = path;
-    }
-
-    public String getHost() {
-        return this.host;
-    }
-
     public String getMethod() {
         return this.method;
     }
@@ -46,9 +42,13 @@ public class Request {
         return this.path;
     }
 
+    public String getHost() {
+        return this.host;
+    }
+
     public String getBody() {
         if (hasBody()) {
-            return headerBody[1];
+            return headerBodyStrings[1];
         }
         return "";
     }
@@ -70,6 +70,6 @@ public class Request {
     }
 
     private boolean hasBody() {
-        return headerBody.length > 1;
+        return headerBodyStrings.length > 1;
     }
 }
