@@ -1,5 +1,6 @@
 package server.request;
 
+import static java.lang.Integer.parseInt;
 import static server.constants.FormatHelpers.*;
 
 public class RequestParser {
@@ -20,20 +21,15 @@ public class RequestParser {
     }
 
     public String host() {
-        String[] lines = clientRequest.split(CRLF);
-        String[] hostLine = new String[2];
-        for(String line : lines) {
-            if(line.contains("Host")) {
-                hostLine = line.split(COLON);
-            }
-        }
-        return hostLine[SECOND_ELEMENT];
+        return getValueByHeader("Host");
     }
 
     public String body() {
-        splitAtBlankLine();
-        if (splitAtBlankLine().length >1) {
-            return splitAtBlankLine()[SECOND_ELEMENT];
+        String contentLength = getValueByHeader("Content-Length");
+        String lines[] = getLines();
+        if (contentLength != null && parseInt(contentLength) > 0) {
+            int lastLine = lines.length - 1;
+            return lines[lastLine];
         }
         return null;
     }
@@ -42,12 +38,25 @@ public class RequestParser {
         return new Request(httpMethod(), path(), host(), body());
     }
 
-    private String[] splitAtBlankLine() {
-       return clientRequest.split(CRLF+CRLF);
+    private String[] getLines() {
+        return clientRequest.split(CRLF);
     }
 
     private String[] getRequestLine() {
-        String[] lines = clientRequest.split(CRLF);
+        String[] lines = getLines();
         return lines[FIRST_ELEMENT].split(SPACE);
+    }
+
+    private String getValueByHeader(String header) {
+        String[] lines = getLines();
+        String[] splitSingleLine;
+
+        for (String line : lines) {
+            if (line.contains(header)) {
+                splitSingleLine = line.split(COLON);
+                return splitSingleLine[SECOND_ELEMENT];
+            }
+        }
+        return null;
     }
 }

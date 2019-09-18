@@ -30,7 +30,7 @@ public class RouteHandlerTest {
 
     @Test
     public void returnsEchoedResponseWithStatusCode200ForSimplePostRequest() {
-        String postRequest = "POST /echo_body HTTP/1.1\r\n\r\nsome body";
+        String postRequest = "POST /echo_body HTTP/1.1\r\nContent-Length: 9\r\n\r\nsome body";
         Request fakePostRequest  = new RequestParser(postRequest).buildRequest();
 
         response = routeHandler.getResponse(fakePostRequest);

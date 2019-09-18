@@ -1,7 +1,6 @@
 package server.response;
 
-import server.constants.Protocol;
-import server.constants.StatusCode;
+import server.constants.*;
 
 import static server.constants.FormatHelpers.*;
 
@@ -29,7 +28,7 @@ public class Response {
         if (body != null) {
             this.body = CRLF + body;
         } else {
-            this.body = "";
+            this.body = CRLF;
         }
         return this;
     }
@@ -39,8 +38,6 @@ public class Response {
     }
 
     private String formatHeaders(String name, String value) {
-        StringBuilder headers = new StringBuilder().append(name).append(COLON).append(value).append(CRLF);
-
-        return headers.toString();
+        return new StringBuilder().append(name).append(COLON).append(value).append(CRLF).toString();
     }
 }
