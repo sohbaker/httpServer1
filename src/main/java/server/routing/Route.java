@@ -1,6 +1,6 @@
 package server.routing;
 
-import server.request.Method;
+import server.constants.*;
 
 public class Route {
     private Method requestMethod;
@@ -12,8 +12,8 @@ public class Route {
         return this;
     }
 
-    public Route setRequestPath(String path) {
-        this.requestPath = path;
+    public Route setRequestPath(Path path) {
+        this.requestPath = path.getPath();
         return this;
     }
 

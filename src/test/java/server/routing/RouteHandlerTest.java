@@ -1,6 +1,7 @@
 package server.routing;
 
 import org.junit.*;
+import server.constants.StatusCode;
 import server.request.Request;
 import server.response.*;
 

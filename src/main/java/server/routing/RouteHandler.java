@@ -1,5 +1,7 @@
 package server.routing;
 
+import server.constants.Method;
+import server.constants.StatusCode;
 import server.request.*;
 import server.response.*;
 
@@ -72,7 +74,7 @@ public class RouteHandler {
     }
 
     private boolean isHeadRequest(Request request) {
-        return Method.OPTIONS.toString().equalsIgnoreCase(request.getMethod());
+        return Method.HEAD.toString().equalsIgnoreCase(request.getMethod());
     }
 
     private Response buildHeadResponse() {

@@ -1,6 +1,7 @@
 package server.response;
 
 import org.junit.*;
+import server.constants.StatusCode;
 
 import static org.junit.Assert.*;
 

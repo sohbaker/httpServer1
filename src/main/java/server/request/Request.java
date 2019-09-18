@@ -1,10 +1,8 @@
 package server.request;
 
-import server.helper.ControlCharacter;
+import static server.constants.FormatHelpers.*;
 
 public class Request {
-    private String CRLF = new ControlCharacter().CRLF();
-    private String space = new ControlCharacter().space();
     private String[] headerBodyStrings;
     private String method;
     private String path;
@@ -64,7 +62,7 @@ public class Request {
     }
 
     private void splitFirstLineOfHeader(String firstLine) {
-        String[] splitMethodPath = firstLine.split(space);
+        String[] splitMethodPath = firstLine.split(SPACE);
         setMethod(splitMethodPath[0]);
         setPath(splitMethodPath[1]);
     }

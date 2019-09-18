@@ -1,6 +1,6 @@
 package server.routing;
 
-import server.request.Method;
+import server.constants.Method;
 
 import java.util.*;
 
