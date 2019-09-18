@@ -8,4 +8,8 @@ public class ControlCharacter {
     public String CRLF() {
         return "\r\n";
     }
+
+    public String separator() {
+        return ": ";
+    }
 }

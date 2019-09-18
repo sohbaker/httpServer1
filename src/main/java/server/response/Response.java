@@ -1,26 +1,44 @@
 package server.response;
 
-import server.helper.Protocol;
-
-import java.util.List;
+import server.helper.*;
 
 public class Response {
-    private String protocol = Protocol._1_1.getVersion();
-    private String statusCode;
-    private List<String> headers;
+    private ControlCharacter character = new ControlCharacter();
+    private String CRLF = character.CRLF();
+    private String statusLine;
+    private String headers;
     private String body;
-    private ResponseBuilder responseBuilder;
 
-    public Response(String statusCode, List<String> headers, String body, ResponseBuilder responseBuilder) {
-        this.statusCode = statusCode;
-        this.headers = headers;
-        this.body = body;
-        this.responseBuilder = responseBuilder;
+    public Response setStatusLine(StatusCode statusCode) {
+        String protocol = Protocol._1_1.getVersion();
+        String space = character.space();
+
+        this.statusLine = protocol + space + statusCode.getMessage() + CRLF;
+        return this;
     }
 
-    public String format() {
-        responseBuilder.setStatusLine(protocol, statusCode).setHeaders(headers).setBody(body);
+    public Response setHeaders(String name, String value) {
+        if (name != null && value != null) {
+            this.headers = formatHeaders(name, value);
+        } else {
+            this.headers = "";
+        }
+        return this;
+    }
 
-        return responseBuilder.build().toString();
+    public Response setBody(String body) {
+        this.body = CRLF + body;
+        return this;
+    }
+
+    public String toString() {
+        return this.statusLine + this.headers + this.body;
+    }
+
+    private String formatHeaders(String name, String value) {
+        String separator = character.separator();
+        StringBuilder headers = new StringBuilder().append(name).append(separator).append(value).append(CRLF);
+
+        return headers.toString();
     }
 }
