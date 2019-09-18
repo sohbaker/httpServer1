@@ -10,7 +10,7 @@ public class HttpServerTest {
     @Test
     public void receivesAClientRequestAndReturnsAResponse() throws IOException {
         MockClientSocketCreator mockClientSocketCreator = new MockClientSocketCreator();
-        Socket mockClientSocket = mockClientSocketCreator.createWithInput("GET /simple_get HTTP/1.1");
+        Socket mockClientSocket = mockClientSocketCreator.createWithInput("GET /simple_get HTTP/1.1\r\n\r\nContent-Length: 0");
         ServerSocket mockServerSocket = new MockServerSocket(mockClientSocket);
         PrintWriter serverMessages = new PrintWriter(new StringWriter(), true);
 

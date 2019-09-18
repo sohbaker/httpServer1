@@ -28,7 +28,7 @@ public class Response {
         if (body != null) {
             this.body = CRLF + body;
         } else {
-            this.body = "";
+            this.body = CRLF;
         }
         return this;
     }

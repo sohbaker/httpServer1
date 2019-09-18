@@ -11,7 +11,7 @@ class HttpServer {
     private InputStream clientInput;
     private PrintWriter clientOutput;
     private PrintWriter serverMessages;
-    private server.request.Request request;
+    private Request request;
     private Socket clientSocket;
 
     public HttpServer(ServerSocket serverSocket, PrintWriter serverMessages) {

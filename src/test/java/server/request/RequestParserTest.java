@@ -5,8 +5,11 @@ import org.junit.*;
 import static junit.framework.TestCase.*;
 
 public class RequestParserTest {
-    String request = "GET /simple_get HTTP/1.1\r\nHost: local:3000\r\n\r\nsome text";
+    String request = "GET /simple_get HTTP/1.1\r\nHost: local:3000\r\nContent-Length: 9\r\n\r\nsome text";
     RequestParser requestParser;
+
+    public RequestParserTest() {
+    }
 
     @Before
     public void setUpParser() {
@@ -35,7 +38,7 @@ public class RequestParserTest {
 
     @Test
     public void returnsNullWhenThereIsNoBody() {
-        String request = "GET /simple_get HTTP/1.1\r\nHost: local:3000\r\n\r\n";
+        String request = "GET /simple_get HTTP/1.1\r\nHost: local:3000\r\nContent-Length: 0\r\n\r\n";
         RequestParser requestParser = new RequestParser(request);;
         assertNull("local:3000",requestParser.body());
     }
